@@ -4,7 +4,7 @@ from .form import *
 from .models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login as dj_login, logout as dj_logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate
 
 
 @csrf_exempt
@@ -35,17 +35,12 @@ def login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            try:
-                user = User.objects.get(username=username)
-            except User.DoesNotExist:
-                return render (request, 'login.html', {'form':LoginForm() ,'error':'user does not exist'})   
-
-            if user.check_password(password):
-                    dj_login(request, user)
-                    return redirect(reverse('home'))
-                    
-            else: 
-                    return render (request, 'login.html', { 'form':form,'error':'password is incorrect'}) 
+            user = authenticate(request, username=username, password=password)
+            if user:
+                dj_login(request, user)
+                return redirect(reverse('home'))
+            else:
+                return render(request, 'login.html', {'form': form, 'error': 'Invalid username or password'})
                                 
         else:
             return render (request, 'login.html', {'form':LoginForm(request.POST) , 'error':'invalid credintial'})          
