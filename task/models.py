@@ -8,7 +8,7 @@ class Task(models.Model):
     status_choices = (('P',"Pending"),('D',"Done"))
     priority_choices = (('U','Urgnet'),('I','Important'),('IU','Important and urgent'),('C','Casual'))
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=80)
     priority = models.CharField(max_length=2,choices= priority_choices,default='C')
     description = models.TextField(blank=True)
     date_created = models.DateTimeField(auto_now_add=True , editable=False)

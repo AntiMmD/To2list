@@ -32,7 +32,33 @@
     <div class="task-list">
         {% for task in tasks %}
         <div class="task-item">
-            <span>{{ task.name }}</span>
+                <!-- {% if task.priority == 'UI' %}
+                    <span class="UI-tasks" onclick="toggleTaskCompletion(this)">
+                        {{task.name}}
+                    </span>
+                {% endif %}
+
+                {% if task.priority == 'U' %}
+                    <span class="U-tasks" onclick="toggleTaskCompletion(this)">
+                        {{task.name}}
+                    </span>
+                {% endif %}
+
+                {% if task.priority == 'I' %}
+                    <span class="I-tasks" onclick="toggleTaskCompletion(this)">
+                        {{task.name}}
+                    </span>
+                {% endif %}
+
+                {% if task.priority == 'C' %}
+                    <span class="C-tasks" onclick="toggleTaskCompletion(this)">
+                        {{task.name}}
+                    </span>
+                {% endif %} -->
+                <span class="task-text" onclick="toggleTaskCompletion(this)">
+                    {{ task.name }}
+                </span>
+                
             <div class="task-actions">
                 <form action="{% url 'update_task' task.id %}" method="GET" style="display: inline;">
                     <button type="submit" class="small-btn">Edit</button>
@@ -45,6 +71,7 @@
         </div>
         {% endfor %}
     </div>
+    
 
     <script>
         // JavaScript for logout confirmation
@@ -54,7 +81,13 @@
                 window.location.href = "{% url 'logout' %}";  // Redirect to logout URL if confirmed
             }
         });
+
+        function toggleTaskCompletion(taskElement) {
+            taskElement.classList.toggle("completed");
+        }
+
     </script>
+
 {% endblock %}
 
 

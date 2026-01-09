@@ -10,8 +10,29 @@ import re
 @login_required(login_url=reverse_lazy('login'))
 def home(request):
     if request.method=='GET':
-        tasks = request.user.tasks.all()
-        return render(request ,'home.html', {'tasks': tasks}) 
+        allTasks = request.user.tasks.all()
+        sortedTasks= []
+        iuTasks= []
+        uTasks= []
+        iTasks= []
+        cTasks= []
+        for task in allTasks:
+            if task.priority == 'IU':
+                iuTasks.append(task)
+
+            elif task.priority == 'U':
+                uTasks.append(task)
+            
+            elif task.priority == 'I':
+                iTasks.append(task)
+
+            elif task.priority == 'C':
+                cTasks.append(task)
+
+
+        sortedTasks+= iuTasks + uTasks + iTasks + cTasks
+
+        return render(request ,'home.html', {'tasks': sortedTasks}) 
 
 
 @csrf_exempt

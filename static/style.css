@@ -115,6 +115,7 @@ button:hover {
     background-color: var(--primary-color);
     color: white;
     border: none;
+    margin-bottom: 10px;
 }
 
 .small-btn:hover {
@@ -182,4 +183,15 @@ input:focus, textarea:focus, select:focus {
     padding: 0.75rem;
     font-size: 1rem;
     width: auto;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.task-text {
+    cursor: pointer;
+    display: block; 
+    position: relative; 
 }
