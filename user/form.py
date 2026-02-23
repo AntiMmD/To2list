@@ -13,28 +13,6 @@ class SignUpForm(forms.ModelForm):
         user.save()  # Now save to DB
         return user
 
-
-
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=30)
     password = forms.CharField(widget=forms.PasswordInput)
-
-
-class CreateTask(forms.ModelForm):
-    
-    class Meta:
-        model = Task
-        fields = '__all__'
-        exclude = ['date_created','status','user',]
-        widgets = {
-            'expiration_date': forms.DateInput(
-                attrs={
-                    'type': 'date',})
-                }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        self.fields['description'].required = False  # Make 'description' optional
-        self.fields['expiration_date'].required = False  # Make 'expiration_date' optional
-        self.fields['priority'].required = False  # Make 'status' optional
