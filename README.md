@@ -1,6 +1,6 @@
 # Django To-Do List Application (Orbit)
 
-A workspace-style task manager where each project holds its own task list.
+A web-based task management application built with Django that allows users to create, manage, and track their tasks.
 
 ## Features
 
