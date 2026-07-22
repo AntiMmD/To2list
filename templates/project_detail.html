@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.name }} · Orbit{% endblock %}
+
+{% block content %}
+<section class="page-hero project-hero">
+    <div class="project-heading">
+        <a href="{% url 'home' %}" class="back-link"><i class="fa-solid fa-arrow-left"></i> All projects</a>
+        <div class="project-title-row">
+            <span class="project-hero-icon">{{ project.icon }}</span>
+            <div>
+                <h1 class="page-title">{{ project.name }}</h1>
+                {% if project.description %}
+                <p class="page-subtitle">{{ project.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="hero-actions">
+        <a href="{% url 'update_project' project.id %}" class="btn btn-ghost">Edit</a>
+        <form action="{% url 'delete_project' project.id %}" method="POST" onsubmit="return confirm('Delete this project and all its tasks?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger-ghost">Delete</button>
+        </form>
+        <a href="{% url 'add_task' project.id %}" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Add task
+        </a>
+    </div>
+</section>
+
+<div class="toolbar">
+    <form action="{% url 'search_task' project.id %}" method="GET" class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" name="task_name" placeholder="Search tasks…" value="{{ search_query|default:'' }}">
+    </form>
+    <div class="stat-pills">
+        <span class="stat-pill">{{ project.task_count }} tasks</span>
+        <span class="stat-pill accent">{{ project.done_count }} done</span>
+    </div>
+</div>
+
+{% if error %}
+<p class="error-message">{{ error }}</p>
+{% endif %}
+
+<div class="task-list">
+    {% for task in tasks %}
+    <article class="task-item priority-{{ task.priority }} {% if task.status == 'D' %}is-done{% endif %}">
+        <form action="{% url 'toggle_task' project.id task.id %}" method="POST" class="task-check-form">
+            {% csrf_token %}
+            <button type="submit" class="task-check" aria-label="Toggle done">
+                {% if task.status == 'D' %}
+                <i class="fa-solid fa-circle-check"></i>
+                {% else %}
+                <i class="fa-regular fa-circle"></i>
+                {% endif %}
+            </button>
+        </form>
+
+        <div class="task-body">
+            <div class="task-main">
+                <h3 class="task-name">{{ task.name }}</h3>
+                {% if task.description %}
+                <p class="task-desc">{{ task.description }}</p>
+                {% endif %}
+            </div>
+            <div class="task-meta">
+                <span class="priority-badge priority-{{ task.priority }}">
+                    {% if task.priority == 'IU' %}Urgent + Important
+                    {% elif task.priority == 'U' %}Urgent
+                    {% elif task.priority == 'I' %}Important
+                    {% else %}Casual{% endif %}
+                </span>
+                {% if task.expiration_date %}
+                <span class="due-date"><i class="fa-regular fa-calendar"></i> {{ task.expiration_date|date:"M j, Y" }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="task-actions">
+            <a href="{% url 'update_task' project.id task.id %}" class="btn btn-sm btn-ghost">Edit</a>
+            <form action="{% url 'delete_task' project.id task.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-danger-ghost">Delete</button>
+            </form>
+        </div>
+    </article>
+    {% empty %}
+    <div class="empty-state compact">
+        <div class="empty-illustration">📝</div>
+        <h2>No tasks in this project</h2>
+        <p>Add your first task to get momentum going.</p>
+        <a href="{% url 'add_task' project.id %}" class="btn btn-primary">Add a task</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

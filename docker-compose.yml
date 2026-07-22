@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    container_name: orbit-todo
+    ports:
+      - "1000:8000"
+    environment:
+      DJANGO_DEBUG: "0"
+      DJANGO_SECRET_KEY: "change-me-in-production-use-a-long-random-string"
+      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
+      DJANGO_CSRF_TRUSTED_ORIGINS: "http://localhost:1000,http://127.0.0.1:1000"
+    volumes:
+      - sqlite_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  sqlite_data:

@@ -2,13 +2,90 @@
 <html lang="en">
 <head>
     {% load static %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Todo List{% endblock %}</title>
+    <title>{% block title %}Orbit{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-<body>
-    {% block content %}{% endblock %}
+<body class="{% if user.is_authenticated %}app-body{% else %}auth-body{% endif %}">
+    {% if user.is_authenticated %}
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <a href="{% url 'home' %}" class="brand">
+                <span class="brand-mark">O</span>
+                <span class="brand-name">Orbit</span>
+            </a>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">
+                    <span>Projects</span>
+                    <a href="{% url 'create_project' %}" class="icon-btn" title="New project">+</a>
+                </div>
+                <nav class="project-nav">
+                    {% for p in projects %}
+                    <a href="{% url 'project_detail' p.id %}"
+                       class="project-nav-item {% if active_project and active_project.id == p.id %}active{% endif %}">
+                        <span class="project-icon">{{ p.icon }}</span>
+                        <span class="project-nav-name">{{ p.name }}</span>
+                        <span class="project-nav-count">{{ p.task_count }}</span>
+                    </a>
+                    {% empty %}
+                    <p class="sidebar-empty">No projects yet</p>
+                    {% endfor %}
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-chip">
+                    <span class="user-avatar">{{ user.username|first|upper }}</span>
+                    <span class="user-name">{{ user.username }}</span>
+                </div>
+                <a href="{% url 'logout' %}" class="logout-btn" id="logout-link" title="Log out">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </a>
+            </div>
+        </aside>
+
+        <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+        <main class="main-panel">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" type="button" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <script>
+        document.getElementById('logout-link')?.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (confirm('Log out of Orbit?')) {
+                window.location.href = "{% url 'logout' %}";
+            }
+        });
+
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const menuBtn = document.getElementById('mobile-menu-btn');
+
+        function closeSidebar() {
+            sidebar?.classList.remove('open');
+            backdrop?.classList.remove('show');
+        }
+
+        menuBtn?.addEventListener('click', () => {
+            sidebar?.classList.toggle('open');
+            backdrop?.classList.toggle('show');
+        });
+        backdrop?.addEventListener('click', closeSidebar);
+    </script>
+    {% else %}
+    <div class="auth-shell">
+        {% block auth_content %}{% endblock %}
+    </div>
+    {% endif %}
 </body>
 </html>

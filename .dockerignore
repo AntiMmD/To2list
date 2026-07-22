@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+.venv/
+venv/
+env/
+.git/
+.gitignore
+.vscode/
+*.md
+2doList.slnx
+data/
+staticfiles/
+*.log

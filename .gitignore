@@ -1,3 +1,10 @@
 db.sqlite3
+data/
+staticfiles/
 **/__pycache__/
-**/migrations/**  
+*.py[cod]
+.venv/
+venv/
+env/
+.env
+*.log

@@ -1,93 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}Todo List{% endblock %}
+{% block title %}Projects · Orbit{% endblock %}
 
 {% block content %}
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <a href="{% url 'home' %}" style="text-decoration: none;">
-            <h1 class="todo-header">To-do List!</h1>
-        </a>
-
-        <!-- Door Icon with Logout Action -->
-        <a href="{% url 'logout' %}" id="logout-link" style="position: absolute; left: 15px; top: 10px; font-size: 1.5rem; color: var(--error-color); transition: color 0.3s ease;">
-            <i class="fa fa-door-open"></i>
-        </a>
-
-        <!-- Search Form -->
-        <form action="{% url 'search_task'%}" method="GET" style="flex-grow: 0; margin-left: 10px;">
-            <input type="text" id="search-task" name="task_name" placeholder="Search task" style="width: 200px; padding: 0.4rem; border-radius: 50px; border: 1px solid var(--border-color); font-size: 0.9rem;">
-        </form>
+<section class="page-hero">
+    <div>
+        <p class="eyebrow">Workspace</p>
+        <h1 class="page-title">Your projects</h1>
+        <p class="page-subtitle">Create spaces for each area of life, then fill them with tasks.</p>
     </div>
-    
-    {% if error %}
-    <p class="error-message">{{ error }}</p>
-    {% endif %}
-    
-    <!-- Add Task -->
-    <form action="{% url 'add_task'%}" method="GET">
-        <button type="submit" class="small-btn">Add Task</button>
-    </form>
+    <a href="{% url 'create_project' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> New project
+    </a>
+</section>
 
-    <!-- Task List -->
-    <div class="task-list">
-        {% for task in tasks %}
-        <div class="task-item">
-                <!-- {% if task.priority == 'UI' %}
-                    <span class="UI-tasks" onclick="toggleTaskCompletion(this)">
-                        {{task.name}}
-                    </span>
-                {% endif %}
-
-                {% if task.priority == 'U' %}
-                    <span class="U-tasks" onclick="toggleTaskCompletion(this)">
-                        {{task.name}}
-                    </span>
-                {% endif %}
-
-                {% if task.priority == 'I' %}
-                    <span class="I-tasks" onclick="toggleTaskCompletion(this)">
-                        {{task.name}}
-                    </span>
-                {% endif %}
-
-                {% if task.priority == 'C' %}
-                    <span class="C-tasks" onclick="toggleTaskCompletion(this)">
-                        {{task.name}}
-                    </span>
-                {% endif %} -->
-                <span class="task-text" onclick="toggleTaskCompletion(this)">
-                    {{ task.name }}
-                </span>
-                
-            <div class="task-actions">
-                <form action="{% url 'update_task' task.id %}" method="GET" style="display: inline;">
-                    <button type="submit" class="small-btn">Edit</button>
-                </form>
-                <form action="{% url 'delete_task' task.id %}" method="POST" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="small-btn delete-btn">Delete</button>
-                </form>
+{% if projects %}
+<div class="project-grid">
+    {% for project in projects %}
+    <a href="{% url 'project_detail' project.id %}" class="project-card">
+        <div class="project-card-top">
+            <span class="project-card-icon">{{ project.icon }}</span>
+            <span class="project-card-meta">{{ project.done_count }}/{{ project.task_count }} done</span>
+        </div>
+        <h2 class="project-card-title">{{ project.name }}</h2>
+        {% if project.description %}
+        <p class="project-card-desc">{{ project.description|truncatewords:18 }}</p>
+        {% else %}
+        <p class="project-card-desc muted">No description yet</p>
+        {% endif %}
+        <div class="project-card-footer">
+            <div class="progress-track">
+                {% widthratio project.done_count project.task_count|default:1 100 as pct %}
+                <div class="progress-fill" style="width: {% if project.task_count %}{{ pct }}{% else %}0{% endif %}%"></div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-    
-
-    <script>
-        // JavaScript for logout confirmation
-        document.getElementById('logout-link').addEventListener('click', function(event) {
-            event.preventDefault();  // Prevent the default link behavior
-            if (confirm("Are you sure you want to log out?")) {
-                window.location.href = "{% url 'logout' %}";  // Redirect to logout URL if confirmed
-            }
-        });
-
-        function toggleTaskCompletion(taskElement) {
-            taskElement.classList.toggle("completed");
-        }
-
-    </script>
-
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-illustration">✨</div>
+    <h2>Start with a project</h2>
+    <p>Each project is its own space with a dedicated list of tasks.</p>
+    <a href="{% url 'create_project' %}" class="btn btn-primary">Create your first project</a>
+</div>
+{% endif %}
 {% endblock %}
-
-

@@ -1,45 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login · Orbit{% endblock %}
 
-{% block extra_styles %}
-.login-link {
-    margin-top: 20px;
-}
-
-a {
-    color: #2196F3;
-    text-decoration: none;
-    margin-left: 5px;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-{% endblock %}
-
-{% block content %}
-    <h1>Login To Account</h1>
-    <p>You can create and manage your tasks when you are logged in.</p>
+{% block auth_content %}
+<div class="auth-card">
+    <div class="auth-brand">
+        <span class="brand-mark">O</span>
+        <span class="brand-name">Orbit</span>
+    </div>
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Sign in to manage your projects and tasks.</p>
 
     {% if error %}
-        <p class="error-message">{{ error }}</p>
-        <br>
+    <p class="error-message">{{ error }}</p>
     {% endif %}
-    
-    <div class="form-container">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {{ form.password.label_tag }}
-            {{ form.password }}
-            <br><br>
-            <button type="submit">Login</button>
-        </form>
-    </div>
 
-    <div class="login-link">
-        <p>Don't have an account?<a href="{% url 'signup' %}">Sign up</a></p>
-    </div>
+    <form method="POST" class="task-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password.id_for_label }}">Password</label>
+            {{ form.password }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Log in</button>
+    </form>
+
+    <p class="auth-footer">
+        Don’t have an account? <a href="{% url 'signup' %}">Sign up</a>
+    </p>
+</div>
 {% endblock %}
