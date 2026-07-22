@@ -1,79 +1,43 @@
-# Django To-Do List Application
+# Django To-Do List Application (Orbit)
 
 A web-based task management application built with Django that allows users to create, manage, and track their tasks.
 
 ## Features
 
-- User Authentication
-  - Custom user model with email and username
-  - User registration and login
-  - Password hashing for security
-  - Protected routes for authenticated users
+- User authentication (custom user model)
+- Multiple projects per user
+- Tasks scoped to a project (create, edit, delete, toggle done, search)
+- Priority levels and optional due dates
+- Responsive sidebar workspace UI
 
-- Task Management
-  - Create new tasks
-  - Update existing tasks
-  - Delete tasks
-  - Search tasks by name
-  - View all tasks on homepage
+## Local setup
 
-
-## Setup and Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/AntiMmD/To2list.git
-```
-
-2. Create a virtual environment and activate it:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
-```bash
-pip install django
-```
-
-4. Apply migrations:
-```bash
+# Windows: venv\Scripts\activate
+# macOS/Linux: source venv/bin/activate
+pip install -r requirements.txt
+mkdir data
+python manage.py makemigrations
 python manage.py migrate
-```
-
-5. Create a superuser:
-```bash
-python manage.py createsuperuser
-```
-
-6. Run the development server:
-```bash
 python manage.py runserver
 ```
 
+Open http://127.0.0.1:8000
+
+## Docker
+
+```bash
+docker compose up --build
+```
+
+App runs at http://localhost:8000
+
+SQLite data is stored in the `sqlite_data` volume.
+
 ## Usage
 
-1. Register a new account using email and username
-2. Log in with your credentials
-3. Create new tasks from the homepage
-4. View all your tasks on the homepage
-5. Update or delete tasks as needed
-6. Use the search functionality to find specific tasks
-
-## Routes
-
-- `/user/signup/` - User registration
-- `/user/login/` - User login
-- `/user/logout/` - User logout
-- `/user/home/` - Homepage with task list
-- `/user/add_task/` - Create new task
-- `/user/delete_task/<id>/` - Delete specific task
-- `/user/update_task/<id>/` - Update specific task
-- `/user/search_task/` - Search tasks
-
-## Security Features
-
-- Custom user authentication
-- Password hashing
-- Login required for task management
-- User-specific task access
+1. Sign up / log in
+2. Create a project
+3. Open the project and add tasks
+4. Toggle tasks done, edit, delete, or search within a project

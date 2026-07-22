@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Update task · Orbit{% endblock %}
+{% block title %}Edit {{ project.name }} · Orbit{% endblock %}
 
 {% block content %}
 <section class="form-page">
-    <a href="{% url 'project_detail' project.id %}" class="back-link"><i class="fa-solid fa-arrow-left"></i> {{ project.name }}</a>
-    <h1 class="page-title">Update task</h1>
-    <p class="page-subtitle">Refine the details for this task.</p>
+    <a href="{% url 'project_detail' project.id %}" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    <h1 class="page-title">Edit project</h1>
+    <p class="page-subtitle">Update the name, description, or icon.</p>
 
     <div class="form-panel">
         <form method="POST" class="task-form">
@@ -22,7 +22,7 @@
                 {% endif %}
             </div>
             {% endfor %}
-            <button type="submit" class="btn btn-primary btn-block">Save task</button>
+            <button type="submit" class="btn btn-primary btn-block">Save changes</button>
         </form>
     </div>
 </section>

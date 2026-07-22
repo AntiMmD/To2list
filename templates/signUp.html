@@ -1,40 +1,43 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}Sign up · Orbit{% endblock %}
 
-{% block content %}
-    <h1>Create an Account</h1>
-    <p>Sign up to start managing your tasks today!</p>
+{% block auth_content %}
+<div class="auth-card">
+    <div class="auth-brand">
+        <span class="brand-mark">O</span>
+        <span class="brand-name">Orbit</span>
+    </div>
+    <h1 class="auth-title">Create your space</h1>
+    <p class="auth-subtitle">Sign up to start organizing projects and tasks.</p>
 
     {% if errors %}
         {% for field, messages in errors.items %}
             {% for message in messages %}
-                <p class="error-message">{{ message }}</p>
+            <p class="error-message">{{ message }}</p>
             {% endfor %}
         {% endfor %}
     {% endif %}
 
-    <div class="form-container">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="{{ form.username.id_for_label }}">Username</label>
-                {{ form.username }}
-            </div>
-            <div class="form-group">
-                <label for="{{ form.email.id_for_label }}">Email</label>
-                {{ form.email }}
-            </div>
-            <div class="form-group">
-                <label for="{{ form.password.id_for_label }}">Password</label>
-                {{ form.password }}
-            </div>
-            <br>
-            <button type="submit">Sign Up</button>
-        </form>
-    </div>
+    <form method="POST" class="task-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password.id_for_label }}">Password</label>
+            {{ form.password }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+    </form>
 
-    <div class="login-link">
-        <p>Already signed up?<a href="{% url 'login' %}"> Login</a></p>
-    </div>
+    <p class="auth-footer">
+        Already signed up? <a href="{% url 'login' %}">Log in</a>
+    </p>
+</div>
 {% endblock %}

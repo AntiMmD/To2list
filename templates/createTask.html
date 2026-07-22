@@ -1,33 +1,29 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Add Task{% endblock %}
+{% block title %}Add task · Orbit{% endblock %}
 
 {% block content %}
-    <h1>Add Task</h1>
+<section class="form-page">
+    <a href="{% url 'project_detail' project.id %}" class="back-link"><i class="fa-solid fa-arrow-left"></i> {{ project.name }}</a>
+    <h1 class="page-title">Add task</h1>
+    <p class="page-subtitle">Add something to get done in {{ project.name }}.</p>
 
-    <div class="form-container" style="position: relative;">
-        
-        <!-- X Mark for Redirection -->
-        <a href="{% url 'home' %}" style="position: absolute; top: 5px; left: 10px; font-size: 24px; text-decoration: none; color: red;">&times;</a>
-
+    <div class="form-panel">
         <form method="POST" class="task-form">
             {% csrf_token %}
             {% for field in form %}
-                <div class="form-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    <div class="input-container">
-                        {{ field }}
-                    </div>
-                    {% if field.errors %}
-                        <div class="error-message">
-                            {% for error in field.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="error-message">
+                    {% for error in field.errors %}<p>{{ error }}</p>{% endfor %}
                 </div>
+                {% endif %}
+            </div>
             {% endfor %}
-            <button type="submit">Create Task</button>
+            <button type="submit" class="btn btn-primary btn-block">Create task</button>
         </form>
     </div>
+</section>
 {% endblock %}
